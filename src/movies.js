@@ -111,4 +111,32 @@ function bestYearAvg(moviesArray) {
     if (moviesArray.length === 0) {
         return null
     }
+    const moviesYears = {};
+
+    moviesArray.forEach(function (movie) {
+        if (!moviesYears[movie.year]) {
+            moviesYears[movie.year] = [];
+            moviesYears[movie.year].push(movie);
+        } else {
+            moviesYears[movie.year].push(movie);
+        }
+    });
+
+    let highest = 0;
+    let bestYear;
+
+    for (const year in moviesYears) {
+        const currentYearAverage = scoresAverage(moviesYears[year]);
+
+        if (currentYearAverage > highest) {
+            highest = currentYearAverage;
+            bestYear = year;
+        } else if (currentYearAverage === highest) {
+            // Check which year is the lowest and save it to the `oldestYear`
+            const oldestYear = year < bestYear ? year : bestYear;
+            bestYear = oldestYear;
+        }
+    }
+
+    return `The best year was ${bestYear} with an average score of ${highest}`;
 }
